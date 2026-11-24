@@ -1,16 +1,25 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#07131f"><title>AZAM EARN | Telegram Mini App</title>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#07131f"><title>AZAM EARN | Telegram Mini App</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-:root{color-scheme:dark;--bg:#07131f;--panel:#102235;--line:#25435b;--text:#eff7ff;--muted:#a7bbce;--teal:#54e0c0;--gold:#ffd37a}*{box-sizing:border-box}body{margin:0;background:radial-gradient(700px 400px at 90% 0,#173b53,transparent 70%),var(--bg);color:var(--text);font-family:system-ui,Tahoma,Arial,sans-serif;line-height:1.8}.wrap{width:min(620px,92%);margin:auto;padding:22px 0 40px}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffffff20;padding-bottom:16px}.brand{font-size:19px;font-weight:900}.brand b{color:var(--teal)}.panel{background:linear-gradient(145deg,#142b40,#0d1d2d);border:1px solid var(--line);border-radius:18px;padding:20px;margin:18px 0}.muted{color:var(--muted)}.warning{border-right:3px solid var(--gold);background:#ffd37a12;padding:12px;border-radius:9px;color:#f8e8c7;font-size:13px}.btn{display:block;text-align:center;padding:12px;background:var(--teal);color:#06201d;font-weight:800;border-radius:12px;margin-top:15px}.tag{font-size:12px;color:var(--teal);border:1px solid var(--line);padding:5px 10px;border-radius:30px}
-</style></head>
-<body><main class="wrap">
+:root{color-scheme:dark;--bg:#07131f;--panel:#102235;--line:#25435b;--text:#eff7ff;--muted:#a7bbce;--teal:#54e0c0;--gold:#ffd37a;--red:#ff8585}*{box-sizing:border-box}body{margin:0;background:radial-gradient(700px 400px at 90% 0,#173b53,transparent 70%),var(--bg);color:var(--text);font-family:system-ui,Tahoma,Arial,sans-serif;line-height:1.8}.wrap{width:min(620px,92%);margin:auto;padding:22px 0 40px}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffffff20;padding-bottom:16px}.brand{font-size:19px;font-weight:900}.brand b{color:var(--teal)}.panel{background:linear-gradient(145deg,#142b40,#0d1d2d);border:1px solid var(--line);border-radius:18px;padding:20px;margin:18px 0}.muted{color:var(--muted)}.warning{border-right:3px solid var(--gold);background:#ffd37a12;padding:12px;border-radius:9px;color:#f8e8c7;font-size:13px}.tag{font-size:11px;color:var(--teal);border:1px solid var(--line);padding:5px 10px;border-radius:30px}.btn{display:block;text-align:center;padding:12px;background:var(--teal);color:#06201d;font-weight:800;border-radius:12px;margin-top:15px;text-decoration:none}.status{font-size:13px}.error{color:var(--red)}.success{color:var(--teal)}
+</style></head><body><main class="wrap">
 <header class="top"><div class="brand"><b>AZAM</b> EARN</div><span class="tag">Telegram Mini App</span></header>
-<section class="panel"><h1>مرحباً بك في AZAM EARN</h1><p class="muted">واجهة تيليجرام الأولية للمنصة. سيتم عرض بيانات الحساب والمكافآت بعد التحقق من هوية Telegram وربط الخدمات الخلفية بأمان.</p><div class="warning" id="state">جارٍ التحقق من بيئة تيليجرام…</div></section>
-<section class="panel"><h3>حسابك ومكافآتك</h3><p class="muted">لا يتم عرض رصيد افتراضي أو أرباح غير مؤكدة. لا توجد طلبات سحب مفعّلة في هذه النسخة.</p><a class="btn" href="../index.html">فتح صفحة المنصة</a></section>
-<p class="muted" style="font-size:12px;text-align:center">لا تشارك رمز الدخول أو بيانات محفظتك مع أي شخص.</p>
-</main>
+<section class="panel"><h1>مرحباً بك في AZAM EARN</h1><p class="muted">نربط حساب تيليجرام بعد التحقق من التوقيع الرسمي ومدة صلاحية بيانات الدخول.</p><div id="state" class="warning status">جارٍ التحقق من بيئة تيليجرام…</div><p id="identity" class="muted"></p></section>
+<section class="panel"><h3>حسابك ومكافآتك</h3><p class="muted">التحقق من هوية تيليجرام لا ينشئ رصيداً ولا يمنح مكافآت. ستظهر البيانات المالية فقط بعد تسجيل الدخول وربط الحساب.</p><a class="btn" href="../index.html">فتح لوحة AZAM EARN</a></section>
+<p class="muted" style="font-size:12px;text-align:center">لا تشارك رمز الدخول أو بيانات محفظتك مع أي شخص.</p></main>
 <script>
-(function(){var box=document.getElementById('state');var app=window.Telegram&&window.Telegram.WebApp;if(app){app.ready();app.expand();box.textContent='تم اكتشاف Telegram Web App. لم يتم إرسال بياناتك إلى الخادم في هذه النسخة الأولية.';}else{box.textContent='لم يتم فتح الصفحة داخل Telegram. افتحها من البوت لاستخدام واجهة Mini App.';}})();
+(async function(){
+ const state=document.getElementById('state'),identity=document.getElementById('identity');
+ const app=window.Telegram&&window.Telegram.WebApp;
+ if(!app||!app.initData){state.textContent='افتح هذه الصفحة من خلال بوت تيليجرام لتسجيل الدخول.';return;}
+ app.ready();app.expand();
+ try{
+  state.textContent='جارٍ التحقق الآمن من توقيع تيليجرام…';
+  const response=await fetch('https://bnoyjkbzakncqlvbvelb.supabase.co/functions/v1/telegram-initdata-verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:app.initData})});
+  const result=await response.json();
+  if(!response.ok||!result.verified){state.className='warning status error';state.textContent=result.error==='init_data_replayed'?'تم رفض إعادة استخدام بيانات دخول سابقة. أغلق التطبيق وافتحه مجدداً.':('تعذر التحقق: '+(result.error||'unknown_error'));return;}
+  const u=result.telegramUser||{};identity.textContent='مرحباً '+[u.first_name,u.last_name].filter(Boolean).join(' ')+' · '+(u.username?'@'+u.username:'حساب تيليجرام');state.className='warning status success';state.textContent='تم التحقق من هوية تيليجرام وتسجيلها. لم يتم ربطها بحساب مالي بعد.';
+ }catch(e){state.className='warning status error';state.textContent='تعذر الاتصال بخدمة التحقق. حاول مجدداً لاحقاً.';}
+})();
 </script></body></html>
