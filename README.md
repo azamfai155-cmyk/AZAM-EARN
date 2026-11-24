@@ -1,13 +1,31 @@
-# AZAM EARN — reconstructed source baseline
+# AZAM EARN
 
-This repository contains a safe, editable reconstruction of the two HTML entry points found in the existing Vercel deployment.
+Arabic-first ad and rewards platform source.
 
-## Files
-- `src/index.html` — Arabic landing page.
-- `src/telegram/index.html` — Telegram Mini App entry page.
+## Project structure
+- `index.html` — root redirect to the static app.
+- `src/index.html` — Supabase-backed user dashboard.
+- `src/telegram/index.html` — Telegram Mini App identity verification UI.
+- `telegram/index.html` — Telegram route redirect.
 
-## Important status
-This is a source recovery baseline, not a verified byte-for-byte copy of the deployed site. The deployed HTML could not be retrieved completely. No ad network, reward provider, wallet, withdrawal, or balance settlement is simulated here. Those integrations must be connected and tested against the existing Supabase schema before production use.
+## Supabase integration
+The browser uses only the project's public publishable key. No service-role key or provider signing secret is shipped to the client.
+- Email/password sign-up and sign-in through Supabase Auth.
+- Active offers are read from `public.offers`, filtered to approved/connected incentive providers that support Yemen.
+- Balances and history are read from the user's own `public.ledger_entries` rows.
+- Wallet/network preferences are stored in the user's own `public.profiles` row.
+- USDT payout requests are inserted as `pending`; the database trigger validates the saved destination and available balance while serializing requests on the user's profile row. This records a request only; it does not send USDT.
+- Telegram Mini App sends Telegram `initData` to the `telegram-initdata-verify` Edge Function. The endpoint verifies the Telegram signature and rejects replayed initData.
 
-## Local preview
-Open `src/index.html` in a browser. The Telegram page requires opening inside Telegram to access the Telegram Web App SDK.
+## Deployment
+Vercel serves the `src` directory as the static output directory. The current GitHub-linked preview was built from `main`.
+
+## Production readiness limitations
+- No eligible ad provider or active offer is currently registered in the database.
+- There are no real reward conversions or ledger credits yet.
+- No Binance/USDT payout provider is connected; payout requests require manual review and payment outside this application.
+- Telegram identity verification is not the same as linking Telegram to an authenticated email account.
+- Supabase Auth leaked-password protection is currently disabled; enable it in the Supabase Auth password/security settings.
+- Test sign-up, email confirmation, sign-in, offer visibility, and payout-request validation in the preview before promoting it to production.
+
+Never create fake offers, balances, conversions, or payout confirmations.
